@@ -6,7 +6,7 @@ import store from './store'
 store.dispatch('moviesGet')
 store.dispatch('movieSessionsGet')
 
-import './assets/main.css'
+import './styles/base.scss'
 
 const app = createApp(App)
 
