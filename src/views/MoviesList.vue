@@ -38,6 +38,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(40%, 250px), 1fr));
   gap: calc(var(--gap-double) * 2);
+  padding: var(--gap-double);
 
   &__item {
     color: inherit;

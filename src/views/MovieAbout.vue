@@ -52,26 +52,27 @@ export default {
 
 <style lang="scss">
 .about {
-  width: 90%;
-  max-width: 1020px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: auto;
 
   &__tabs {
     display: grid;
     width: 100%;
     grid-template-columns: 1fr 1fr;
+    background: var(--bg-secondary);
     cursor: pointer;
-
+    position: sticky;
+    top: var(--header-height);
+    z-index: 1;
+    
     &__item {
       text-align: center;
       padding: var(--gap-double);
       border-bottom: 2px solid rgba(109, 158, 255, 0.1);
     }
-
+    
     &--active {
       color: var(--txt-primary-color);
       text-shadow: 0px 0px 16px rgba(255, 128, 54, 0.5);
@@ -79,13 +80,13 @@ export default {
       pointer-events: none;
     }
   }
-
+  
   &__main {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
     padding: var(--gap-double);
-
+    
     &__img {
       width: 50%;
       aspect-ratio: 0.8;
