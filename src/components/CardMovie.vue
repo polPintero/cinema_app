@@ -45,7 +45,6 @@ export default {
 
 &__name {
     margin-block-end: var(--gap);
-    cursor: pointer;
   }
 }
 </style>

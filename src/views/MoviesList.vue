@@ -1,15 +1,15 @@
 <template>
   <div class="movies-list">
-    <card-movie
-      v-for="film in allMovies"
-      :key="film.id"
-      :id="film.id"
-      :name="film.name"
-      :image="film.image"
-      :additional="film.additional"
-      :genre="film.genre"
-      :description="film.description"
-    />
+    <router-link :to="$router.routeList.movie + '/' + film.id" v-for="film in allMovies" :key="film.id" class="movies-list__item">
+      <card-movie
+        :id="film.id"
+        :name="film.name"
+        :image="film.image"
+        :additional="film.additional"
+        :genre="film.genre"
+        :description="film.description"
+      />
+    </router-link>
   </div>
 </template>
 
@@ -23,6 +23,9 @@ export default {
     return {
       allMovies: this.$store.state.allMovies
     }
+  },
+  created(){
+    console.log(this.$router)
   }
 }
 </script>
@@ -32,5 +35,10 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(40%, 250px), 1fr));
   gap: calc(var(--gap-double) * 2);
+
+  &__item {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 </style>
