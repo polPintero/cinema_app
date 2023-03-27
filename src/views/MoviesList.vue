@@ -1,6 +1,11 @@
 <template>
   <div class="movies-list">
-    <router-link :to="$router.routeList.movie + '/' + film.id" v-for="film in allMovies" :key="film.id" class="movies-list__item">
+    <router-link
+      :to="$router.routeList.movie + '/' + film.id"
+      v-for="film in allMovies"
+      :key="film.id"
+      class="movies-list__item"
+    >
       <card-movie
         :id="film.id"
         :name="film.name"
@@ -24,9 +29,7 @@ export default {
       allMovies: this.$store.state.allMovies
     }
   },
-  created(){
-    console.log(this.$router)
-  }
+
 }
 </script>
 

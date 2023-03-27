@@ -6,13 +6,14 @@ export default createStore({
   state: {
     genreEnum,
     allMovies: [],
+    selectedMovieId: null
   },
   getters: {},
   mutations: {
     setAllMovies (state, payload) {
       console.log(payload)
       state.allMovies = payload
-    }
+    },
   },
   actions: {
     async moviesGet ({ commit }) {
