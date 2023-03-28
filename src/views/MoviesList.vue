@@ -19,17 +19,17 @@
 </template>
 
 <script>
+
 import CardMovie from '../components/CardMovie.vue'
 
 export default {
   name: 'MoviesList',
   components: { CardMovie },
-  data() {
-    return {
-      allMovies: this.$store.state.allMovies
+  computed: {
+    allMovies(){
+      return this.$store.state.allMovies
     }
   },
-
 }
 </script>
 

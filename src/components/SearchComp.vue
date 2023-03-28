@@ -61,13 +61,13 @@ export default {
   }
 
   &__clear {
-    --size: 15px;
+    --size: 22px;
     display: none;
     position: absolute;
     top: 50%;
     right: 5px;
     transform: translateY(-50%);
-    padding: var(--gap-step);
+    padding: 5px;
     border-radius: 100%;
     width: var(--size);
     height: var(--size);

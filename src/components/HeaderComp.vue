@@ -1,7 +1,7 @@
 <template>
   <div class="header">
-    <dropdown-comp v-model="selectedGenre" :list="Object.keys(genreEnum)" />
-    <search-comp v-model="searchString"/>
+    <dropdown-comp v-model="filter.genres" :list="genreEnum" />
+    <search-comp v-model="filter.name"/>
   </div>
 </template>
 
@@ -15,12 +15,19 @@ export default {
   data() {
     return {
       genreEnum: this.$store.state.genreEnum,
-      selectedGenre: '',
-      searchString: ''
+      filter: this.$store.state.filter,
+      timeout: null
     }
   },
   watch: {
-    searchString(){
+    'filter.name': function () {
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(()=>{
+        this.$store.dispatch('filterMovieGet')
+      },200)
+    },
+    'filter.genres': function () {
+      this.$store.dispatch('filterMovieGet')
     }
   }
 }
@@ -32,7 +39,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   background: var(--bg-secondary);
-  padding: var(--gap-double) ;
+  padding: var(--gap-double);
   position: sticky;
   top: 0;
   height: var(--header-height);

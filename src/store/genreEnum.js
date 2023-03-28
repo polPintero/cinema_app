@@ -1,8 +1,8 @@
 export default {
-  ACTION: 0,
-  ADVENTURES: 1,
-  COMEDY: 2,
-  DRAMA: 3,
-  HORROR: 4,
-  WESTERNS: 5
+  0:'ACTION',
+  1:'ADVENTURES',
+  2:'COMEDY',
+  3:'DRAMA',
+  4:'HORROR',
+  5:'WESTERNS'
 }

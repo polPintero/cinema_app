@@ -2,18 +2,24 @@
   <div class="dropdown" @click="toggleVisible" :class="{ 'dropdown--show': visible }">
     <div class="dropdown__wrap-btn">
       <chevron-icon class="dropdown__chevron"></chevron-icon>
-      <button class="dropdown__btn">{{ modelValue.toLowerCase() || placeholder }}</button>
+      <button class="dropdown__btn">{{ valueVisible }}</button>
     </div>
     <ul class="dropdown__content" @click="toggleVisible">
       <li
-        v-for="name in list"
-        :key="name"
         class="dropdown__content__name"
-        :class="{ 'dropdown__content__name--active': name === modelValue }"
-        :value="name"
-        @click="$emit('update:modelValue', name)"
+        :class="{ 'dropdown__content__name--active': valueVisible === placeholder }"
+        @click="$emit('update:modelValue', null)"
       >
-        <span>{{ name.toLowerCase() }}</span>
+        <span>{{ placeholder }}</span>
+      </li>
+      <li
+        v-for="(value, id) in list"
+        :key="id"
+        class="dropdown__content__name"
+        :class="{ 'dropdown__content__name--active': id === modelValue }"
+        @click="$emit('update:modelValue', id)"
+      >
+        <span>{{ value.toLowerCase() }}</span>
       </li>
     </ul>
   </div>
@@ -38,6 +44,12 @@ export default {
     placeholder: {
       type: String,
       default: 'all'
+    }
+  },
+  computed: {
+    valueVisible() {
+      const value = this.list[this.modelValue]
+      return value ? value.toLowerCase() : this.placeholder
     }
   },
   data() {
@@ -65,7 +77,7 @@ export default {
   display: inline-block;
   cursor: pointer;
   background: var(--bg-secondary);
-  
+
   &__btn {
     width: 100%;
     padding: var(--gap) var(--gap-double);

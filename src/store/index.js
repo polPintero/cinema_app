@@ -6,12 +6,15 @@ export default createStore({
   state: {
     genreEnum,
     allMovies: [],
-    selectedMovieId: null
+    selectedMovieId: null,
+    filter: {
+      name: null,
+      genres: null
+    }
   },
   getters: {},
   mutations: {
     setAllMovies (state, payload) {
-      console.log(payload)
       state.allMovies = payload
     },
   },
@@ -20,9 +23,18 @@ export default createStore({
       const allMovies = await api.moviesGet()
       commit('setAllMovies', allMovies.data)
     },
-    async movieSessionsGet ({ commmit }, id = 0) {
+    async movieSessionsGet ({ commit }, id = 0) {
       const allMovies = await api.movieSessionsGet(id)
-      console.log(allMovies.data)
+      // console.log(allMovies.data)
+    },
+    async filterMovieGet ({ commit, state }) {
+      const {filter} = state
+      const query = {}
+      Object.keys(filter).forEach(key => {
+        if (filter[key] !== null) query[key] = filter[key] 
+      })
+      const allMovies = await api.moviesGet(query)
+      commit('setAllMovies', allMovies.data)
     }
   },
   modules: {}
