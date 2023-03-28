@@ -1,11 +1,11 @@
 <template>
-  <div class="header">
+  <div class="header" >
     <template v-if="$route.path === $router.routeList.base">
       <dropdown-comp v-model="filter.genres" :list="genreEnum" />
       <search-comp v-model="filter.name"/>
     </template>
     <template v-else>
-      <h3 class="header__movie-name" v-html="selectedMovie.name"></h3>
+      <h3 v-if="selectedMovie" class="header__movie-name" v-html="selectedMovie.name"></h3>
     </template>
   </div>
 </template>

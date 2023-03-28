@@ -43,6 +43,11 @@ export default createStore({
       })
       const allMovies = await api.moviesGet(query)
       commit('setAllMovies', allMovies.data)
+    },
+    async getMovieById({ commit }, id){
+      const response = await api.getMovieById(id)
+      commit('selectedMovieIdSet', id)
+      commit('setAllMovies', response.data)
     }
   },
   modules: {}

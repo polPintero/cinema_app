@@ -1,5 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import routeList from './routeList'
+import store from '../store'
+
+function getmovie(to){
+  if(store.state.selectedMovieId !== null) return
+  const id = to.params.id
+  store.dispatch('getMovieById', id)
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,7 +19,8 @@ const router = createRouter({
     {
       path: routeList.movie + '/:id',
       name: routeList.movie,
-      component: () => import('@/views/MovieAbout.vue')
+      component: () => import('@/views/MovieAbout.vue'),
+      beforeEnter:[getmovie]
     }
   ]
 })

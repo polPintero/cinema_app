@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="about" v-if="selectedMovie">
     <section class="about__tabs">
       <div
         class="about__tabs__item"
@@ -27,19 +27,25 @@ export default {
   data() {
     return {
       tabs: ['About', 'Sessions'],
-      activeTab: 0,
-      selectedMovie: this.$store.getters.selectedMovie
+      activeTab: 0
     }
   },
-  created() {
-    this.selectedMovie.additional = this.selectedMovie.additional.replace(
-      /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-      ''
-    )
-    this.selectedMovie.additional = this.selectedMovie.additional.replace(
-      /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
-      ''
-    )
+  // created() {
+  //   if (this.selectedMovie) {
+  //     this.selectedMovie.additional = this.selectedMovie.additional.replace(
+  //       /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+  //       ''
+  //     )
+  //     this.selectedMovie.additional = this.selectedMovie.additional.replace(
+  //       /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
+  //       ''
+  //     )
+  //   }
+  // },
+  computed: {
+    selectedMovie(){
+      return this.$store.getters.selectedMovie
+    }
   }
 }
 </script>
