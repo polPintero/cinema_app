@@ -1,7 +1,12 @@
 <template>
   <div class="header">
-    <dropdown-comp v-model="filter.genres" :list="genreEnum" />
-    <search-comp v-model="filter.name"/>
+    <template v-if="$route.path === $router.routeList.base">
+      <dropdown-comp v-model="filter.genres" :list="genreEnum" />
+      <search-comp v-model="filter.name"/>
+    </template>
+    <template v-else>
+      <h3 class="header__movie-name" v-html="selectedMovie.name"></h3>
+    </template>
   </div>
 </template>
 
@@ -16,7 +21,12 @@ export default {
     return {
       genreEnum: this.$store.state.genreEnum,
       filter: this.$store.state.filter,
-      timeout: null
+      timeout: null,
+    }
+  },
+  computed: {
+    selectedMovie(){
+      return this.$store.getters.selectedMovie
     }
   },
   watch: {
@@ -36,7 +46,7 @@ export default {
 <style lang="scss">
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   background: var(--bg-secondary);
   padding: var(--gap-double);
@@ -44,5 +54,9 @@ export default {
   top: 0;
   height: var(--header-height);
   z-index: 2;
+
+  .search {
+    margin-left: auto;
+  }
 }
 </style>

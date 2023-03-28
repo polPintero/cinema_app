@@ -5,6 +5,7 @@
       v-for="film in allMovies"
       :key="film.id"
       class="movies-list__item"
+      @click="$store.commit('selectedMovieIdSet', film.id)"
     >
       <card-movie
         :id="film.id"
@@ -29,7 +30,7 @@ export default {
     allMovies(){
       return this.$store.state.allMovies
     }
-  },
+  }
 }
 </script>
 

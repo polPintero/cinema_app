@@ -12,11 +12,19 @@ export default createStore({
       genres: null
     }
   },
-  getters: {},
+  getters: {
+    selectedMovie(state) {
+      const { allMovies, selectedMovieId } = state
+      return allMovies.find((i) => i.id === Number(selectedMovieId))
+    }
+  },
   mutations: {
     setAllMovies (state, payload) {
       state.allMovies = payload
     },
+    selectedMovieIdSet(state, id){
+      state.selectedMovieId = id
+    }
   },
   actions: {
     async moviesGet ({ commit }) {

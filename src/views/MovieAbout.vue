@@ -27,7 +27,8 @@ export default {
   data() {
     return {
       tabs: ['About', 'Sessions'],
-      activeTab: 0
+      activeTab: 0,
+      selectedMovie: this.$store.getters.selectedMovie
     }
   },
   created() {
@@ -39,13 +40,6 @@ export default {
       /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
       ''
     )
-  },
-  computed: {
-    selectedMovie() {
-      const { allMovies } = this.$store.state
-      const movieId = this.$route.params.id
-      return allMovies.find((i) => i.id === Number(movieId))
-    }
   }
 }
 </script>
@@ -66,13 +60,13 @@ export default {
     position: sticky;
     top: var(--header-height);
     z-index: 1;
-    
+
     &__item {
       text-align: center;
       padding: var(--gap-double);
       border-bottom: 2px solid rgba(109, 158, 255, 0.1);
     }
-    
+
     &--active {
       color: var(--txt-primary-color);
       text-shadow: 0px 0px 16px rgba(255, 128, 54, 0.5);
@@ -80,13 +74,13 @@ export default {
       pointer-events: none;
     }
   }
-  
+
   &__main {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
     padding: var(--gap-double);
-    
+
     &__img {
       width: 50%;
       aspect-ratio: 0.8;
