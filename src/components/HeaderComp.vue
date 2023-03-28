@@ -1,15 +1,17 @@
 <template>
   <div class="header">
     <search-comp />
+    <dropdown-comp />
   </div>
 </template>
 
 <script>
 import SearchComp from './SearchComp.vue'
+import DropdownComp from './DropdownComp.vue';
 
 export default {
   name: 'HeaderComp',
-  components: { SearchComp }
+  components: { SearchComp, DropdownComp }
 }
 </script>
 
