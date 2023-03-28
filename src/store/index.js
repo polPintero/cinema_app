@@ -31,9 +31,8 @@ export default createStore({
       const allMovies = await api.moviesGet()
       commit('setAllMovies', allMovies.data)
     },
-    async movieSessionsGet ({ commit }, id = 0) {
-      const allMovies = await api.movieSessionsGet(id)
-      // console.log(allMovies.data)
+    async movieSessionsGet ({ commit, state }) {
+      return await api.movieSessionsGet(state.selectedMovieId)
     },
     async filterMovieGet ({ commit, state }) {
       const {filter} = state

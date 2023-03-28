@@ -25,9 +25,9 @@ class YellowMediaAPI extends API {
   }
   
   async movieSessionsGet(id){
-    const url = this.domain + `/movieShows?id=${id}`
-    const response = await this.sendRequest(url)
-    console.log(response)
+    const url = this.domain + `/movieShows?movie_id=${id}`
+    console.log(url)
+    return await this.sendRequest(url)
   }
 
   async getMovieById(id){

@@ -3,31 +3,43 @@
     <section class="about__tabs">
       <div
         class="about__tabs__item"
-        v-for="(tab, index) in tabs"
-        :class="{ 'about__tabs--active': activeTab === index }"
+        v-for="tab in tabs"
+        :class="{ 'about__tabs--active': activeTab === tab }"
         :key="tab"
-        @click="activeTab = index"
+        @click="activeTab = tab"
       >
         {{ tab }}
       </div>
     </section>
     <div class="about__main">
-      <div class="about__main__img">
-        <img :src="selectedMovie.image" :alt="selectedMovie.name" />
-      </div>
-      <div class="about__main__add" v-html="selectedMovie.additional"></div>
-      <div class="about__main__descr">{{ selectedMovie.description }}</div>
+
+      <template v-if="activeTab === tabs[0]">
+        <div class="about__main__img">
+          <img :src="selectedMovie.image" :alt="selectedMovie.name" />
+        </div>
+        <div class="about__main__add" v-html="selectedMovie.additional"></div>
+        <div class="about__main__descr">{{ selectedMovie.description }}</div>
+      </template>
+
+      <template v-if="activeTab === tabs[1]">
+        <session-movie :sessions="sessions"/>
+      </template>
+
     </div>
   </div>
 </template>
 
 <script>
+import SessionMovie from '../components/SessionMovie.vue';
+
 export default {
   name: 'MovieAbout',
+  components: { SessionMovie },
   data() {
     return {
       tabs: ['About', 'Sessions'],
-      activeTab: 0
+      activeTab: 'About',
+      sessions: null,
     }
   },
   // created() {
@@ -45,6 +57,16 @@ export default {
   computed: {
     selectedMovie(){
       return this.$store.getters.selectedMovie
+    },
+    selectedMovieId(){
+      return this.$store.state.selectedMovieId
+    }
+  },
+  watch: {
+    async activeTab(e){
+      if(e !== this.tabs[1]) return
+      const response = await this.$store.dispatch('movieSessionsGet')
+      this.sessions = response.data[this.selectedMovieId]
     }
   }
 }
