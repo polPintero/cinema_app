@@ -2,20 +2,19 @@
   <div class="dropdown" @click="toggleVisible" :class="{ 'dropdown--show': visible }">
     <div class="dropdown__wrap-btn">
       <chevron-icon class="dropdown__chevron"></chevron-icon>
-      <button class="dropdown__btn">{{ modelValue || placeholder }}</button>
+      <button class="dropdown__btn">{{ modelValue.toLowerCase() || placeholder }}</button>
     </div>
     <ul class="dropdown__content" @click="toggleVisible">
-      <template v-for="item in list" :key="item.name">
-        <li
-          class="dropdown__content__item"
-          :class="{ 'dropdown__content__item--active': item.name === modelValue }"
-          :value="item.name"
-          v-if="conditionVisible(item)"
-          @click="$emit('update:modelValue', item.name)"
-        >
-          <span>{{ item.name }}</span>
-        </li>
-      </template>
+      <li
+        v-for="name in list"
+        :key="name"
+        class="dropdown__content__name"
+        :class="{ 'dropdown__content__name--active': name === modelValue }"
+        :value="name"
+        @click="$emit('update:modelValue', name)"
+      >
+        <span>{{ name.toLowerCase() }}</span>
+      </li>
     </ul>
   </div>
 </template>
@@ -31,13 +30,10 @@ export default {
   emits: ['update:modelValue'],
   props: {
     list: {
-      type: [Array, Object],
-    },
-    valueKey: {
-      type: String,
+      type: Array
     },
     modelValue: {
-      type: [String, Number]
+      type: String
     },
     placeholder: {
       type: String,
@@ -64,27 +60,24 @@ export default {
 
 <style lang="scss">
 .dropdown {
-  // width: 100%;
   color: inherit;
   position: relative;
   display: inline-block;
   cursor: pointer;
   background: var(--bg-secondary);
   
-  
   &__btn {
     width: 100%;
     padding: var(--gap) var(--gap-double);
-    padding-right: calc(var(--gap-double) * 2);
+    padding-right: calc(var(--gap-double) * 3);
+    text-transform: capitalize;
     font-size: 1rem;
     color: inherit;
     text-align: left;
     cursor: pointer;
-    border: none;
     background: var(--bg-secondary);
-
-    &:focus {
-    }
+    border: 1px solid rgba(109, 158, 255, 0.1);
+    border-radius: 8px;
   }
 
   &__wrap-btn {
@@ -97,7 +90,7 @@ export default {
     top: 50%;
     width: 1rem;
     height: 1rem;
-    transform: translateY(-50%);
+    transform: translateY(-50%) rotate(-90deg);
     z-index: 1;
     pointer-events: none;
   }
@@ -107,19 +100,22 @@ export default {
     position: absolute;
     margin-block-start: 5px;
     padding-left: 0;
-    right: 0;
-    z-index: 999999;
+    left: 0;
+    background: var(--bg-secondary);
 
-    &__item {
+    &__name {
       padding: var(--gap) var(--gap-double);
       text-decoration: none;
       display: block;
       border-bottom: 1px solid #2a2b2d;
+      text-transform: capitalize;
       &:hover {
-        span {
-        }
+        color: var(--txt-primary-color);
+        text-shadow: 0px 0px 16px rgba(255, 128, 54, 0.5);
       }
       &--active {
+        color: var(--txt-primary-color);
+        text-shadow: 0px 0px 16px rgba(255, 128, 54, 0.5);
       }
     }
   }
@@ -129,7 +125,7 @@ export default {
       display: block;
     }
     .dropdown__chevron {
-      transform: translateY(-50%) rotate(180deg);
+      transform: translateY(-50%) rotate(90deg);
     }
   }
 }

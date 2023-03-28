@@ -1,27 +1,48 @@
 <template>
   <label class="search">
-    <search-icon class="search__icon" />
-    <input type="text" class="search__input" />
+    <search-icon class="search__lupa" />
+    <input class="search__input" :value="modelValue" @input="inputHandler" />
+    <close-icon class="search__clear" @click="clearInputValue" />
   </label>
 </template>
 
 <script>
 import SearchIcon from './icons/SearchIcon.vue'
+import CloseIcon from './icons/CloseIcon.vue'
 
 export default {
   name: 'SearchComp',
-  components: { SearchIcon }
+  components: { SearchIcon, CloseIcon },
+  emits: ['update:modelValue'],
+  props: { modelValue: { type: String } },
+  methods: {
+    inputHandler(event) {
+      this.emitsValue(event.target.value)
+    },
+    clearInputValue() {
+      this.emitsValue('')
+    },
+    emitsValue(value) {
+      this.$emit('update:modelValue', value)
+    }
+  }
 }
 </script>
 
 <style lang="scss">
 .search {
   position: relative;
-  padding: var(--gap) var(--gap-double);
+  padding: var(--gap) calc(var(--gap-double) * 1.5);
   padding-left: calc(var(--gap-double) * 2);
   border: 1px solid rgba(109, 158, 255, 0.1);
   border-radius: 8px;
   background: var(--bg-secondary);
+
+  &:hover {
+    .search__clear {
+      display: block;
+    }
+  }
 
   &__input {
     background: var(--bg-secondary);
@@ -32,11 +53,26 @@ export default {
     outline: none;
   }
 
-  &__icon {
+  &__lupa {
     position: absolute;
     top: 50%;
-    left: var(--gap);
+    left: 8px;
     transform: translateY(-50%);
+  }
+
+  &__clear {
+    --size: 15px;
+    display: none;
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    padding: var(--gap-step);
+    border-radius: 100%;
+    width: var(--size);
+    height: var(--size);
+    background: var(--bg-base);
+    cursor: pointer;
   }
 }
 </style>
