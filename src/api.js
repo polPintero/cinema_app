@@ -1,5 +1,3 @@
-import mockData from '@/mockData'
-
 class API {
   constructor (domain) {
     this.domain = domain
@@ -26,13 +24,19 @@ class YellowMediaAPI extends API {
   
   async movieSessionsGet(id){
     const url = this.domain + `/movieShows?movie_id=${id}`
-    console.log(url)
     return await this.sendRequest(url)
   }
 
   async getMovieById(id){
     const response = await this.moviesGet({movie_id: id})
     return response
+  }
+
+  async getPlaces(query){
+    let url = this.domain + '/showPlaces'
+    url += `?${new window.URLSearchParams(query)}`
+    const response = await this.sendRequest(url)
+    return response.data
   }
 }
 

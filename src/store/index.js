@@ -31,7 +31,7 @@ export default createStore({
       const allMovies = await api.moviesGet()
       commit('setAllMovies', allMovies.data)
     },
-    async movieSessionsGet ({ commit, state }) {
+    async movieSessionsGet ({ state }) {
       return await api.movieSessionsGet(state.selectedMovieId)
     },
     async filterMovieGet ({ commit, state }) {
@@ -47,6 +47,14 @@ export default createStore({
       const response = await api.getMovieById(id)
       commit('selectedMovieIdSet', id)
       commit('setAllMovies', response.data)
+    },
+    async getPlaces({}, id, date, time){
+      const query = {
+        movie_id: id,
+        daytime: time,
+        showdate: date
+      }
+      return await api.getPlaces(query)
     }
   },
   modules: {}
