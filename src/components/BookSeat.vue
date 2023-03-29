@@ -14,7 +14,13 @@
     </div>
     <div class="cinema__screen">SCREEN</div>
     <div class="cinema__seats" ref="seats">
-      <canvas ref="canvas" @mousedown="mouseDownHandler" @touchmove="mouseMoveHandler" @click="clickHandler"></canvas>
+      <canvas
+        ref="canvas"
+        @mousedown="mouseDownHandler"
+        @touchmove="touchMoveHandler"
+        @click="clickHandler"
+        @touchstart="touchStartHandler"
+      ></canvas>
     </div>
   </section>
 </template>
@@ -32,10 +38,12 @@ export default {
   data() {
     return {
       canvas: {
+        position: null,
         ctx: null,
         cw: 0,
         ch: 0,
         tileSize: 0,
+        minSize: 15,
         gap: 10,
         stepScale: {
           large: 0.2,
@@ -57,11 +65,12 @@ export default {
   methods: {
     mouseDownHandler(ev) {
       this.timeout = Date.now()
-      const { target } = ev
-      target.style.cursor = 'grab'
       const { startDrag, pan } = this.canvas
       startDrag.x = ev.clientX - pan.x
       startDrag.y = ev.clientY - pan.y
+      const { target } = ev
+      if (!target) return
+      target.style.cursor = 'grab'
       target.addEventListener('mousemove', this.mouseMoveHandler)
       document.addEventListener('mouseup', this.mouseUpHandler)
     },
@@ -71,13 +80,30 @@ export default {
       canvas.removeEventListener('mousemove', this.mouseMoveHandler)
       document.removeEventListener('mouseup', this.mouseUpHandler)
     },
+    touchStartHandler(ev) {
+      const coords = this.modifaiCoordinates(ev)
+      this.mouseDownHandler(coords)
+    },
+    modifaiCoordinates(ev) {
+      const touch = ev.touches[0]
+      const { canvas } = this
+      const params = {
+        clientX: touch.clientX - canvas.position.left,
+        clientY: touch.clientY - canvas.position.top
+      }
+      return params
+    },
+    touchMoveHandler(ev) {
+      const coords = this.modifaiCoordinates(ev)
+      this.mouseMoveHandler(coords)
+    },
     mouseMoveHandler(ev) {
       const { startDrag, pan } = this.canvas
       pan.x = ev.clientX - startDrag.x
       pan.y = ev.clientY - startDrag.y
     },
     clickHandler(ev) {
-      if (Date.now() > this.timeout + 300) return
+      if (Date.now() > this.timeout + 400 && ev.pointerType !== 'touch') return
       const { offsetX, offsetY } = ev
       const pixel = this.mirror.ctx.getImageData(offsetX, offsetY, 1, 1)
       const color = `rgb(${pixel.data[0]}, ${pixel.data[1]}, ${pixel.data[2]})`
@@ -99,26 +125,33 @@ export default {
         : (this.canvas.scale += stepScale.small)
     },
     drawInit() {
+      const { canvas, mirror, seats } = this
       const wrap = this.$refs.seats
       const wrapStyles = wrap.getBoundingClientRect()
-      const canvas = this.$refs.canvas
-      this.canvas.cw = wrapStyles.width
-      canvas.width = this.canvas.cw
-      this.canvas.ch = window.innerHeight - wrapStyles.top
-      canvas.height = this.canvas.ch
-      this.canvas.ctx = canvas.getContext('2d')
+      const canvasElem = this.$refs.canvas
+      canvas.cw = wrapStyles.width
+      canvasElem.width = canvas.cw
+      canvas.ch = window.innerHeight - wrapStyles.top
+      canvasElem.height = canvas.ch
+      canvas.ctx = canvasElem.getContext('2d')
+      canvas.position = canvasElem.getBoundingClientRect()
 
-      this.mirror.canvas = document.createElement('canvas')
-      this.mirror.canvas.width = this.canvas.cw
-      this.mirror.canvas.height = this.canvas.ch
-      this.mirror.ctx = this.mirror.canvas.getContext('2d')
+      mirror.canvas = document.createElement('canvas')
+      mirror.canvas.width = canvas.cw
+      mirror.canvas.height = canvas.ch
+      mirror.ctx = mirror.canvas.getContext('2d')
 
-      let width = this.canvas.cw / this.seats[0][1].length
-      let height = this.canvas.ch / this.seats.length
-      this.canvas.tileSize = width > height ? height : width
-      this.canvas.tileSize = height > width ? width : height
-      this.canvas.tileSize -= this.canvas.gap
+      const lengtRow = seats[0][1].length
+      let width = canvas.cw / lengtRow
+      let height = canvas.ch / seats.length
+      
+      canvas.tileSize = width > height ? height : width
+      canvas.tileSize = height > width ? width : height
+      canvas.tileSize -= canvas.gap
+      canvas.tileSize = canvas.tileSize < canvas.minSize ? canvas.minSize : canvas.tileSize
 
+      canvas.scale = (canvas.position.width / (lengtRow * (canvas.tileSize + canvas.gap)))
+ 
       this.createPickerList()
 
       requestAnimationFrame(this.draw)
@@ -163,7 +196,8 @@ export default {
 
           if (seatElem.is_free) {
             ctx.beginPath()
-            ctx.font = '6px Roboto'
+            // const fontSize = 6*scale
+            ctx.font = `6px Roboto`
             ctx.textAlign = 'center'
             ctx.textBaseline = 'middle'
             ctx.fillStyle = 'white'
@@ -203,8 +237,10 @@ export default {
     }
   },
   mounted() {
-    this.drawInit()
-    console.log(this.seats)
+    this.$nextTick(()=>{
+      this.drawInit()
+      console.log(this.seats)
+    })
   }
 }
 </script>
@@ -264,7 +300,7 @@ export default {
   &__control {
     position: absolute;
     top: var(--gap-double);
-    right: calc(var(--gap-double) * 3);
+    right: calc(var(--gap-double));
     button {
       padding: var(--gap) var(--gap-double);
       margin: 0 var(--gap);
