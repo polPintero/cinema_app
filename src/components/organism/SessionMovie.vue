@@ -56,7 +56,7 @@ export default {
 
     &__time {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
       gap: var(--gap-double);
       span {
         width: fit-content;
