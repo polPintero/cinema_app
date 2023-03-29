@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import HeaderComp from './components/HeaderComp.vue'
+import HeaderComp from '@/components/organism/HeaderComp.vue'
 
 export default {
   name: 'App',

@@ -26,7 +26,8 @@ export default {
   name: 'MoviesList',
   components: { CardMovie },
   created() {
-    this.$store.dispatch('moviesGet')
+    // this.$store.dispatch('moviesGet')
+    this.$store.dispatch('filterMovieGet')
   },
   computed: {
     allMovies() {

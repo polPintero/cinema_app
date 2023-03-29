@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import SessionMovie from '@/components/SessionMovie.vue'
+import SessionMovie from '@/components/organism/SessionMovie.vue'
 import TabsComp from '@/components/atoms/TabsComp.vue'
 
 export default {
