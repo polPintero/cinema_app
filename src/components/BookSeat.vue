@@ -1,10 +1,18 @@
 <template>
   <tabs-comp>
     <template #showdate>
-      <div>{{ showdate }}</div>
+      <div class="tabs__info">
+        <div class="tabs__info__wrap">
+          <calendar-icon /><span>{{ showdate }}</span>
+        </div>
+      </div>
     </template>
     <template #daytime>
-      <div>{{ daytime }}</div>
+      <div class="tabs__info">
+        <div class="tabs__info__wrap">
+          <clock-icon /> <span>{{ daytime }}</span>
+        </div>
+      </div>
     </template>
   </tabs-comp>
   <section class="cinema">
@@ -27,9 +35,12 @@
 
 <script>
 import TabsComp from './TabsComp.vue'
+import CalendarIcon from '@/components/icons/CalendarIcon.vue'
+import ClockIcon from './icons/ClockIcon.vue'
+
 export default {
   name: 'BookSeat',
-  components: { TabsComp },
+  components: { TabsComp, CalendarIcon, ClockIcon },
   props: {
     daytime: { type: String, default: '' },
     showdate: { type: String, default: '' },
@@ -144,14 +155,14 @@ export default {
       const lengtRow = seats[0][1].length
       let width = canvas.cw / lengtRow
       let height = canvas.ch / seats.length
-      
+
       canvas.tileSize = width > height ? height : width
       canvas.tileSize = height > width ? width : height
       canvas.tileSize -= canvas.gap
       canvas.tileSize = canvas.tileSize < canvas.minSize ? canvas.minSize : canvas.tileSize
 
-      canvas.scale = (canvas.position.width / (lengtRow * (canvas.tileSize + canvas.gap)))
- 
+      canvas.scale = canvas.position.width / (lengtRow * (canvas.tileSize + canvas.gap))
+
       this.createPickerList()
 
       requestAnimationFrame(this.draw)
@@ -237,7 +248,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(()=>{
+    this.$nextTick(() => {
       this.drawInit()
       console.log(this.seats)
     })
@@ -311,6 +322,24 @@ export default {
       border: none;
       box-shadow: 0px 4px 16px rgba(255, 128, 54, 0.25);
       border-radius: 8px;
+    }
+  }
+}
+
+.tabs__info {
+  display: flex;
+  justify-content: center;
+
+  &__wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--gap) var(--gap-double);
+    border: 1px solid rgba(109, 158, 255, 0.1);
+    border-radius: 8px;
+    width: fit-content;
+    span {
+      margin-left: var(--gap-double);
     }
   }
 }
