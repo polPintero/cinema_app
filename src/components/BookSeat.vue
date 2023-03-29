@@ -9,8 +9,8 @@
   </tabs-comp>
   <section class="cinema">
     <div class="cinema__control">
-        <button @click="scaleUp">+</button>
-        <button @click="scaleDown">-</button>
+      <button @click="scaleUp">zoom +</button>
+      <button @click="scaleDown">zoom -</button>
     </div>
     <div class="cinema__screen">SCREEN</div>
     <div class="cinema__seats" ref="seats">
@@ -81,8 +81,9 @@ export default {
       const { offsetX, offsetY } = ev
       const pixel = this.mirror.ctx.getImageData(offsetX, offsetY, 1, 1)
       const color = `rgb(${pixel.data[0]}, ${pixel.data[1]}, ${pixel.data[2]})`
-      console.log(this.pickerList[color])
-      this.activeSeat = this.pickerList[color]
+      const item = this.pickerList[color]
+      if (!item) return
+      this.activeSeat = item
     },
     scaleDown() {
       const { stepScale } = this.canvas
@@ -209,6 +210,7 @@ export default {
 
 <style lang="scss">
 .cinema {
+  position: relative;
   width: 100%;
   padding-block-start: calc(var(--gap-double) * 4);
 
@@ -255,6 +257,23 @@ export default {
 
     canvas {
       cursor: pointer;
+    }
+  }
+
+  &__control {
+    position: absolute;
+    top: var(--gap-double);
+    right: calc(var(--gap-double) * 3);
+    button {
+      padding: var(--gap) var(--gap-double);
+      margin: 0 var(--gap);
+      cursor: pointer;
+      font-size: 1rem;
+      color: inherit;
+      background: var(--bg-primary);
+      border: none;
+      box-shadow: 0px 4px 16px rgba(255, 128, 54, 0.25);
+      border-radius: 8px;
     }
   }
 }
