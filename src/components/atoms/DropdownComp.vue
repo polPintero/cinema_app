@@ -123,11 +123,11 @@ export default {
       text-transform: capitalize;
       &:hover {
         color: var(--txt-primary-color);
-        text-shadow: 0px 0px 16px rgba(255, 128, 54, 0.5);
+        text-shadow: var(--txt-primary-shadow);
       }
       &--active {
         color: var(--txt-primary-color);
-        text-shadow: 0px 0px 16px rgba(255, 128, 54, 0.5);
+        text-shadow: var(--txt-primary-shadow);
       }
     }
   }
