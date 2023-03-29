@@ -1,5 +1,6 @@
 # cinema_app_yellow_media
 
+## [View Result](http://cinema-app.dobuy.com.ua/)
 # The Task
 Create a web application for cinema (Vue.js OR React.js OR Javascript).
 Application should provide next functionality for users: get list of all movies, see all sessions at the cinema, get movie info, find movie by name or/and genres, book ticket on certain movie's session.
