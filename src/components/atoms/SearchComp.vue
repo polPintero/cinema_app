@@ -34,7 +34,7 @@ export default {
   position: relative;
   padding: var(--gap) calc(var(--gap-double) * 1.5);
   padding-left: calc(var(--gap-double) * 2);
-  border: 1px solid rgba(109, 158, 255, 0.1);
+  border: var(--shadow-primapy);
   border-radius: 8px;
   background: var(--bg-secondary);
 

@@ -267,7 +267,7 @@ export default {
     letter-spacing: 1.5rem;
     font-size: 1.5rem;
     font-weight: bold;
-    color: #637394;
+    color: var(--txt-secondary-color);
 
     &:after {
       content: '';
@@ -280,28 +280,7 @@ export default {
   }
 
   &__seats {
-    gap: var(--gap-double);
     display: grid;
-    &__row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
-      gap: var(--gap-step);
-    }
-
-    &__cell {
-      background: green;
-      border-radius: 8px;
-      width: 20px;
-      aspect-ratio: 1;
-      font-size: 0.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      &--busy {
-        background: red;
-      }
-    }
 
     canvas {
       cursor: pointer;
@@ -335,7 +314,7 @@ export default {
     justify-content: center;
     align-items: center;
     padding: var(--gap) var(--gap-double);
-    border: 1px solid rgba(109, 158, 255, 0.1);
+    border: var(--shadow-primapy);
     border-radius: 8px;
     width: fit-content;
     span {
