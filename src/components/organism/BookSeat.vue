@@ -34,9 +34,9 @@
 </template>
 
 <script>
-import TabsComp from './TabsComp.vue'
-import CalendarIcon from '@/components/icons/CalendarIcon.vue'
-import ClockIcon from './icons/ClockIcon.vue'
+import TabsComp from '@/components/atoms/TabsComp.vue'
+import CalendarIcon from '@/components/atoms/icons/CalendarIcon.vue'
+import ClockIcon from '@/components/atoms/icons/ClockIcon.vue'
 
 export default {
   name: 'BookSeat',

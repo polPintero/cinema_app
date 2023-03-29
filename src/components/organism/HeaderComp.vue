@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import SearchComp from './SearchComp.vue'
-import DropdownComp from './DropdownComp.vue'
+import SearchComp from '@/components/atoms/SearchComp.vue'
+import DropdownComp from '@/components/atoms/DropdownComp.vue'
 
 export default {
   name: 'HeaderComp',

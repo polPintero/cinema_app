@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import CardMovie from '../components/CardMovie.vue'
+import CardMovie from '@/components/organism/CardMovie.vue'
 
 export default {
   name: 'MoviesList',

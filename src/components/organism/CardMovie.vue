@@ -3,12 +3,11 @@
     <img class="card-movie__img" :src="image" :alt="name" />
     <h4 class="card-movie__name">{{ name }}</h4>
     <GenreTag :genre-id="genre" />
-    <!-- <div v-html="additional"></div> -->
   </section>
 </template>
 
 <script>
-import GenreTag from './GenreTag.vue'
+import GenreTag from '@/components/atoms/GenreTag.vue'
 export default {
   name: 'CardMovie',
 
@@ -29,6 +28,7 @@ export default {
 .card-movie {
   display: flex;
   flex-direction: column;
+  aspect-ratio: 0.73;
 
   &__img {
     height: 100%;

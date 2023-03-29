@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import SearchIcon from './icons/SearchIcon.vue'
-import CloseIcon from './icons/CloseIcon.vue'
+import SearchIcon from '@/components/atoms/icons/SearchIcon.vue'
+import CloseIcon from '@/components/atoms/icons/CloseIcon.vue'
 
 export default {
   name: 'SearchComp',

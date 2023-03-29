@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import ChevronIcon from './icons/ChevronIcon.vue'
+import ChevronIcon from '@/components/atoms/icons/ChevronIcon.vue'
 
 export default {
   name: 'DropdownComp',

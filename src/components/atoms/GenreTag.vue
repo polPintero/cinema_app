@@ -16,15 +16,6 @@ export default {
   computed: {
     genreName() {
       return this.genreEnum[this.genreId]
-      // let genreName = ''
-      // Object.keys(this.genreEnum).some((name) => {
-      //   const id = this.genreEnum[name]
-      //   if (id === this.genreId) {
-      //     genreName = name
-      //     return true
-      //   }
-      // })
-      // return genreName
     }
   }
 }

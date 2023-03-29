@@ -28,7 +28,7 @@
 
 <script>
 import SessionMovie from '@/components/SessionMovie.vue'
-import TabsComp from './TabsComp.vue'
+import TabsComp from '@/components/atoms/TabsComp.vue'
 
 export default {
   name: 'AboutComp',

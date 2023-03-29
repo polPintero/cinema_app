@@ -19,7 +19,7 @@ const router = createRouter({
     {
       path: routeList.movie + '/:id',
       name: routeList.movie,
-      component: () => import('@/views/CardMovie.vue'),
+      component: () => import('@/views/MovieInfo.vue'),
       beforeEnter:[getmovie]
     }
   ]

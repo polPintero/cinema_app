@@ -1,5 +1,5 @@
 <template>
-  <div class="card-movie">
+  <div class="movie-info">
     <about-comp v-if="!isBooking" @selected-time="selectedTime"></about-comp>
     <book-seat
       v-else-if="isBooking"
@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import AboutComp from '@/components/AboutComp.vue'
-import BookSeat from '@/components/BookSeat.vue'
-import ModalComp from '@/components/ModalComp.vue'
+import AboutComp from '@/components/organism/AboutComp.vue'
+import BookSeat from '@/components/organism/BookSeat.vue'
+import ModalComp from '@/components/atoms/ModalComp.vue'
 
 
 export default {
@@ -71,7 +71,7 @@ export default {
 </script>
 
 <style lang="scss">
-.card-movie {
+.movie-info {
   display: flex;
   flex-direction: column;
 }
