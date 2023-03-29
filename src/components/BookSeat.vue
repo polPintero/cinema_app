@@ -8,7 +8,12 @@
     </template>
   </tabs-comp>
   <section class="cinema">
+    <button @click="scaleUp">+</button>
+    <button @click="scaleDown">-</button>
     <div class="cinema__screen">SCREEN</div>
+    <div class="cinema__seats" ref="seats">
+      <canvas ref="canvas" @mousedown="mouseDownHandler"></canvas>
+    </div>
   </section>
 </template>
 
@@ -21,6 +26,147 @@ export default {
     daytime: { type: String, default: '' },
     showdate: { type: String, default: '' },
     seats: { type: Array, default: () => [] }
+  },
+  data() {
+    return {
+      canvas: {
+        ctx: null,
+        cw: 0,
+        ch: 0,
+        tileSize: 0,
+        gap: 10,
+        stepScale: {
+          large: 0.2,
+          small: 0.1
+        },
+        scale: 1,
+        pan: { x: 0, y: 0 },
+        startDrag: { x: 0, y: 0 }
+      },
+      mirror: {
+        canvas: null,
+        ctx: null
+      }
+    }
+  },
+  methods: {
+    mouseDownHandler(ev) {
+      const { target } = ev
+      target.style.cursor = 'grab'
+      const { startDrag, pan } = this.canvas
+      startDrag.x = ev.clientX - pan.x
+      startDrag.y = ev.clientY - pan.y
+      target.addEventListener('mousemove', this.mouseMoveHandler)
+      document.addEventListener('mouseup', this.mouseUpHandler)
+    },
+    mouseUpHandler() {
+      const canvas = this.$refs.canvas
+      canvas.style.cursor = 'pointer'
+      canvas.removeEventListener('mousemove', this.mouseMoveHandler)
+      document.removeEventListener('mouseup', this.mouseUpHandler)
+    },
+    mouseMoveHandler(ev) {
+      const { startDrag, pan } = this.canvas
+      pan.x = ev.clientX - startDrag.x
+      pan.y = ev.clientY - startDrag.y
+    },
+    scaleDown() {
+      const { stepScale } = this.canvas
+      this.canvas.scale > 1
+        ? (this.canvas.scale -= stepScale.large)
+        : (this.canvas.scale -= stepScale.small)
+    },
+    scaleUp() {
+      const { stepScale } = this.canvas
+      this.canvas.scale > 1
+        ? (this.canvas.scale += stepScale.large)
+        : (this.canvas.scale += stepScale.small)
+    },
+    drawInit() {
+      const wrap = this.$refs.seats
+      const wrapStyles = wrap.getBoundingClientRect()
+      const canvas = this.$refs.canvas
+      this.canvas.cw = wrapStyles.width
+      canvas.width = this.canvas.cw
+      this.canvas.ch = window.innerHeight - wrapStyles.top
+      canvas.height = this.canvas.ch
+      this.canvas.ctx = canvas.getContext('2d')
+
+      this.mirror.canvas = document.createElement('canvas')
+      this.mirror.canvas.width = this.canvas.cw
+      this.mirror.canvas.height = this.canvas.ch
+      this.mirror.ctx = this.mirror.canvas.getContext('2d')
+
+      let width = this.canvas.cw / this.seats[0][1].length
+      let height = this.canvas.ch / this.seats.length
+      this.canvas.tileSize = width > height ? height : width
+      this.canvas.tileSize = height > width ? width : height
+      this.canvas.tileSize -= this.canvas.gap
+
+      wrap.appendChild(this.mirror.canvas)
+
+      requestAnimationFrame(this.draw)
+    },
+    draw() {
+      const { seats, mirror } = this
+      const { ctx, cw, ch, tileSize, scale, pan } = this.canvas
+      const gap = this.canvas.gap
+      let x = 0
+      let y = 0
+
+      const setTransforms = (ctx) => {
+        ctx.clearRect(0, 0, cw, ch)
+        ctx.save()
+        ctx.translate(pan.x, pan.y)
+        ctx.scale(scale, scale)
+      }
+
+      setTransforms(ctx)
+      setTransforms(mirror.ctx)
+
+      for (let i = 0; i < seats.length; i++) {
+        const row = seats[i][1]
+        y = (tileSize + gap) * i
+
+        for (let h = 0; h < row.length; h++) {
+          const seatElem = row[h] 
+          // seatElem.is_free = Math.random() < 0.5
+          x = (tileSize + gap) * h
+
+          ctx.fillStyle = seatElem.is_free ? '#253554' : '#1F293D'
+
+          const drawBaseTile = (ctx) => {
+            ctx.beginPath()
+            ctx.roundRect(x, y, tileSize, tileSize, 20)
+            ctx.closePath()
+            ctx.fill()
+          }
+          drawBaseTile(ctx)
+          drawBaseTile(mirror.ctx)
+
+          if (seatElem.is_free) {
+            ctx.beginPath()
+            ctx.font = '6px Roboto'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.fillStyle = 'white'
+            ctx.fillText(seatElem.seat, x + tileSize / 2, y + tileSize / 2)
+            ctx.closePath()
+            ctx.fill()
+          }
+        }
+      }
+
+      const restore = (ctx) => {ctx.restore()}
+      restore(ctx)
+      restore(mirror.ctx)
+
+      requestAnimationFrame(this.draw)
+    }
+  },
+  mounted() {
+    this.drawInit()
+    console.log(this.seats)
   }
 }
 </script>
@@ -44,6 +190,35 @@ export default {
       height: 30px;
       border-radius: 100%;
       background: linear-gradient(180deg, #1f293d 0%, rgba(31, 41, 61, 0) 100%);
+    }
+  }
+
+  &__seats {
+    gap: var(--gap-double);
+    display: grid;
+    &__row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+      gap: var(--gap-step);
+    }
+
+    &__cell {
+      background: green;
+      border-radius: 8px;
+      width: 20px;
+      aspect-ratio: 1;
+      font-size: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &--busy {
+        background: red;
+      }
+    }
+
+    canvas {
+      cursor: pointer;
     }
   }
 }
