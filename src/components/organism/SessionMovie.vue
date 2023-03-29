@@ -58,6 +58,14 @@ export default {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
       gap: var(--gap-double);
+      span {
+        width: fit-content;
+        &:hover {
+          color: var(--txt-primary-color);
+          text-shadow: var(--txt-primary-shadow);
+          cursor: pointer;
+        }
+      }
     }
   }
 }
