@@ -299,7 +299,7 @@ export default {
       color: inherit;
       background: var(--bg-primary);
       border: none;
-      box-shadow: 0px 4px 16px rgba(255, 128, 54, 0.25);
+      box-shadow: var(--shadow-primary);
       border-radius: 8px;
     }
   }
@@ -314,7 +314,7 @@ export default {
     justify-content: center;
     align-items: center;
     padding: var(--gap) var(--gap-double);
-    border: var(--shadow-primapy);
+    border: var(--shadow-secondary);
     border-radius: 8px;
     width: fit-content;
     span {

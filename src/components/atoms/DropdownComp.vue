@@ -88,7 +88,7 @@ export default {
     text-align: left;
     cursor: pointer;
     background: var(--bg-secondary);
-    border: var(--shadow-primapy);
+    border: var(--shadow-secondary);
     border-radius: 8px;
   }
 

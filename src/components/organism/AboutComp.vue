@@ -2,10 +2,7 @@
   <template v-if="selectedMovie">
     <tabs-comp>
       <template v-for="tab in tabs" :key="tab" #[tab]>
-        <div
-          :class="{ 'about__tabs--active': activeTab === tab }"
-          @click="activeTab = tab"
-        >
+        <div :class="{ 'about__tabs--active': activeTab === tab }" @click="activeTab = tab">
           {{ tab }}
         </div>
       </template>
@@ -18,6 +15,7 @@
         </div>
         <div class="about__main__add" v-html="selectedMovie.additional"></div>
         <div class="about__main__descr">{{ selectedMovie.description }}</div>
+        <button class="about__main__select-btn" @click="activeTab = tabs[1]">Select Session</button>
       </template>
       <template v-if="activeTab === tabs[1]">
         <session-movie :sessions="sessions" @selected-time="$emit('selectedTime', $event)" />
@@ -104,6 +102,20 @@ export default {
 
     &__descr {
       padding: var(--gap-double) 0;
+    }
+
+    &__select-btn {
+      width: max(200px, 80%);
+      margin: var(--gap-double) auto;
+      padding: var(--gap) var(--gap-double);
+      color: inherit;
+      font-size: 1rem;
+      background: var(--bg-primary);
+      box-shadow: var(--shadow-primary);
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      cursor: pointer;
     }
 
     @media (max-width: $tablet) {
