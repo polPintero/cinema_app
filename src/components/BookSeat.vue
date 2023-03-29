@@ -14,7 +14,7 @@
     </div>
     <div class="cinema__screen">SCREEN</div>
     <div class="cinema__seats" ref="seats">
-      <canvas ref="canvas" @mousedown="mouseDownHandler" @click="clickHandler"></canvas>
+      <canvas ref="canvas" @mousedown="mouseDownHandler" @touchmove="mouseMoveHandler" @click="clickHandler"></canvas>
     </div>
   </section>
 </template>
@@ -84,6 +84,7 @@ export default {
       const item = this.pickerList[color]
       if (!item) return
       this.activeSeat = item
+      this.$emit('selectedSeat', item)
     },
     scaleDown() {
       const { stepScale } = this.canvas

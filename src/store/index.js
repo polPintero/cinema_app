@@ -13,7 +13,7 @@ export default createStore({
     }
   },
   getters: {
-    selectedMovie(state) {
+    selectedMovie (state) {
       const { allMovies, selectedMovieId } = state
       return allMovies.find((i) => i.id === Number(selectedMovieId))
     }
@@ -22,7 +22,7 @@ export default createStore({
     setAllMovies (state, payload) {
       state.allMovies = payload
     },
-    selectedMovieIdSet(state, id){
+    selectedMovieIdSet (state, id) {
       state.selectedMovieId = id
     }
   },
@@ -31,30 +31,40 @@ export default createStore({
       const allMovies = await api.moviesGet()
       commit('setAllMovies', allMovies.data)
     },
+
     async movieSessionsGet ({ state }) {
       return await api.movieSessionsGet(state.selectedMovieId)
     },
+
     async filterMovieGet ({ commit, state }) {
-      const {filter} = state
+      const { filter } = state
       const query = {}
       Object.keys(filter).forEach(key => {
-        if (filter[key] !== null) query[key] = filter[key] 
+        if (filter[key] !== null) query[key] = filter[key]
       })
       const allMovies = await api.moviesGet(query)
       commit('setAllMovies', allMovies.data)
     },
-    async getMovieById({ commit }, id){
+
+    async getMovieById ({ commit }, id) {
       const response = await api.getMovieById(id)
       commit('selectedMovieIdSet', id)
       commit('setAllMovies', response.data)
     },
-    async getPlaces({}, id, date, time){
+
+    async getPlaces (ctx, id, date, time) {
       const query = {
         movie_id: id,
         daytime: time,
         showdate: date
       }
       return await api.getPlaces(query)
+    },
+
+    async bookPlace ({ getters }, query) {
+      const movie = getters.selectedMovie
+      query.movie_id = movie.id
+      return await api.bookPlace(query)
     }
   },
   modules: {}
