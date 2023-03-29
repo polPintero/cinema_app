@@ -8,11 +8,13 @@
     </template>
   </tabs-comp>
   <section class="cinema">
-    <button @click="scaleUp">+</button>
-    <button @click="scaleDown">-</button>
+    <div class="cinema__control">
+        <button @click="scaleUp">+</button>
+        <button @click="scaleDown">-</button>
+    </div>
     <div class="cinema__screen">SCREEN</div>
     <div class="cinema__seats" ref="seats">
-      <canvas ref="canvas" @mousedown="mouseDownHandler"></canvas>
+      <canvas ref="canvas" @mousedown="mouseDownHandler" @click="clickHandler"></canvas>
     </div>
   </section>
 </template>
@@ -46,11 +48,15 @@ export default {
       mirror: {
         canvas: null,
         ctx: null
-      }
+      },
+      pickerList: {},
+      activeSeat: {},
+      timeout: null
     }
   },
   methods: {
     mouseDownHandler(ev) {
+      this.timeout = Date.now()
       const { target } = ev
       target.style.cursor = 'grab'
       const { startDrag, pan } = this.canvas
@@ -69,6 +75,14 @@ export default {
       const { startDrag, pan } = this.canvas
       pan.x = ev.clientX - startDrag.x
       pan.y = ev.clientY - startDrag.y
+    },
+    clickHandler(ev) {
+      if (Date.now() > this.timeout + 300) return
+      const { offsetX, offsetY } = ev
+      const pixel = this.mirror.ctx.getImageData(offsetX, offsetY, 1, 1)
+      const color = `rgb(${pixel.data[0]}, ${pixel.data[1]}, ${pixel.data[2]})`
+      console.log(this.pickerList[color])
+      this.activeSeat = this.pickerList[color]
     },
     scaleDown() {
       const { stepScale } = this.canvas
@@ -103,10 +117,11 @@ export default {
       this.canvas.tileSize = height > width ? width : height
       this.canvas.tileSize -= this.canvas.gap
 
-      wrap.appendChild(this.mirror.canvas)
+      this.createPickerList()
 
       requestAnimationFrame(this.draw)
     },
+
     draw() {
       const { seats, mirror } = this
       const { ctx, cw, ch, tileSize, scale, pan } = this.canvas
@@ -120,7 +135,6 @@ export default {
         ctx.translate(pan.x, pan.y)
         ctx.scale(scale, scale)
       }
-
       setTransforms(ctx)
       setTransforms(mirror.ctx)
 
@@ -129,19 +143,20 @@ export default {
         y = (tileSize + gap) * i
 
         for (let h = 0; h < row.length; h++) {
-          const seatElem = row[h] 
-          // seatElem.is_free = Math.random() < 0.5
+          const seatElem = row[h]
           x = (tileSize + gap) * h
 
           ctx.fillStyle = seatElem.is_free ? '#253554' : '#1F293D'
+          if (seatElem === this.activeSeat) ctx.fillStyle = '#ff8036'
 
           const drawBaseTile = (ctx) => {
             ctx.beginPath()
-            ctx.roundRect(x, y, tileSize, tileSize, 20)
+            ctx.roundRect(x, y, tileSize, tileSize, 4)
             ctx.closePath()
             ctx.fill()
           }
           drawBaseTile(ctx)
+          mirror.ctx.fillStyle = seatElem.color
           drawBaseTile(mirror.ctx)
 
           if (seatElem.is_free) {
@@ -157,11 +172,32 @@ export default {
         }
       }
 
-      const restore = (ctx) => {ctx.restore()}
+      const restore = (ctx) => {
+        ctx.restore()
+      }
       restore(ctx)
       restore(mirror.ctx)
 
       requestAnimationFrame(this.draw)
+    },
+    createPickerList() {
+      const { seats, pickerList } = this
+      for (let i = 0; i < seats.length; i++) {
+        const row = seats[i][1]
+        for (let h = 0; h < row.length; h++) {
+          const seatElem = row[h]
+          const color = this.getColor()
+          pickerList[color] = seatElem
+          seatElem.color = color
+          seatElem.row = seats[i][0].row
+        }
+      }
+    },
+    getColor() {
+      const getRandom = () => Math.floor(Math.random() * 256)
+      const color = `rgb(${getRandom()}, ${getRandom()}, ${getRandom()})`
+      if (this.pickerList[color]) this.getColor()
+      return color
     }
   },
   mounted() {
