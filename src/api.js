@@ -11,10 +11,11 @@ class API {
     }
     return response
   }
-
-  moviesGet () { }
-
-  movieSessionsGet () { }
+  moviesGet () {}
+  movieSessionsGet () {}
+  getMovieById () {}
+  getPlaces () {}
+  bookPlace () {}
 
 }
 
