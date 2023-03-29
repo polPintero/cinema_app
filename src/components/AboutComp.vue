@@ -72,6 +72,7 @@ export default {
     flex-wrap: wrap;
     width: 100%;
     padding: var(--gap-double);
+    padding-block-end: 0;
 
     &__img {
       width: 50%;

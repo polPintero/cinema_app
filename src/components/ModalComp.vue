@@ -1,6 +1,6 @@
 <template>
   <Transition name="modal">
-    <div v-if="show" class="modal-wrap">
+    <div v-if="show" class="modal-wrap" @click="closeModal">
       <div class="modal-container">
         <div class="modal-header" v-if="$slots.header">
           <slot name="header"></slot>
@@ -24,15 +24,18 @@ export default {
     show: Boolean
   },
   methods: {
-    closeModal (event) {
-      if (event.key !== 'Escape') return
+    keyUpHandler(ev) {
+      if (ev.key !== 'Escape') return
+      this.closeModal()
+    },
+    closeModal() {
       this.$emit('close')
     }
   },
-  mounted () {
+  mounted() {
     document.addEventListener('keyup', this.closeModal)
   },
-  beforeUnmount () {
+  beforeUnmount() {
     document.removeEventListener('keyup', this.closeModal)
   }
 }

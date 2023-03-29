@@ -29,7 +29,6 @@ export default {
 .card-movie {
   display: flex;
   flex-direction: column;
-  aspect-ratio: 0.73;
 
   &__img {
     height: 100%;
