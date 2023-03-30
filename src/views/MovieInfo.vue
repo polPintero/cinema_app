@@ -53,7 +53,6 @@ export default {
       } else {
         this.resultTxt = `Your ticket is ${result.data.ticketkey}`
       }
-      console.log(result)
       this.showModal = true
     },
     async selectedTime(ev) {

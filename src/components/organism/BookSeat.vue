@@ -28,6 +28,7 @@
         @touchmove="touchMoveHandler"
         @click="clickHandler"
         @touchstart="touchStartHandler"
+        @wheel="weelHandler"
       ></canvas>
     </div>
   </section>
@@ -74,6 +75,10 @@ export default {
     }
   },
   methods: {
+    weelHandler(ev) {
+      const { deltaY } = ev
+      deltaY > 0 ? this.scaleDown() : this.scaleUp()
+    },
     mouseDownHandler(ev) {
       this.timeout = Date.now()
       const { startDrag, pan } = this.canvas
@@ -250,7 +255,6 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.drawInit()
-      console.log(this.seats)
     })
   }
 }
